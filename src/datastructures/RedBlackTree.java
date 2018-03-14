@@ -312,10 +312,37 @@ public class RedBlackTree {
 		}
 	}
 
+	public int getBlackHeight(Node x) {
+		int bh = 0;
+		x = x.left;
+
+		while (x != NIL) {
+			if (x.color == Color.Black) {
+				bh++;
+			}
+
+			x = x.left;
+		}
+
+		return bh + 1;
+	}
+
+	public int getMaxHeight(Node x) {
+		if (x != NIL) {
+			return Math.max(getMaxHeight(x.left), getMaxHeight(x.right)) + 1;
+		}
+
+		return 0;
+	}
+
 	/*
 	Utility types
 	 */
-	private static final class Node {
+	public enum Color {
+		Black, Red
+	}
+
+	public static final class Node {
 		public Color color;
 		public Node parent;
 		public Node left;
@@ -329,9 +356,5 @@ public class RedBlackTree {
 		public Node(int key) {
 			this.key = key;
 		}
-	}
-
-	private enum Color {
-		Black, Red
 	}
 }
