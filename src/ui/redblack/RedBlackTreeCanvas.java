@@ -71,13 +71,25 @@ public class RedBlackTreeCanvas extends JPanel {
 
 	public final void treeChanged() {
 		nodes.clear();
-		selected = null;
 
 		int treeHeight = rbt.getMaxHeight(rbt.root);
 		int width = (int) ((Math.pow(2, treeHeight) - 1) * 2 * nodeRadius);
 		int height = treeHeight * 4 * nodeRadius + 2 * nodeRadius;
 
 		addNode(width / 2, nodeRadius, rbt.root, width / 4);
+
+		if (selected != null) {
+			RedBlackTree.Node toSelect = rbt.treeSearch(rbt.root, selected.node.key);
+			selected = null;
+			if (toSelect != null) {
+				for (NodeWrapper node: nodes) {
+					if (node.node.key == toSelect.key){
+						selected = node;
+						break;
+					}
+				}
+			}
+		}
 
 		setPreferredSize(new Dimension(width, height));
 		setMaximumSize(getPreferredSize());

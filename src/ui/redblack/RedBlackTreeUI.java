@@ -4,6 +4,7 @@ import datastructures.RedBlackTree;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 /**
  * @author Kasper
@@ -15,15 +16,31 @@ public class RedBlackTreeUI extends JFrame {
 	private JTextField keyField;
 	private JRadioButton redRadio;
 	private JRadioButton blackRadio;
+	private JTextArea informationTextArea;
 
 	public RedBlackTreeUI() {
 		super("RedBlack Tree UI");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		rbt = new RedBlackTree();
 
-		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
-		getContentPane().add(setupCanvas());
-		getContentPane().add(setupControlPanel());
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		mainPanel.add(setupCanvas());
+		mainPanel.add(setupControlPanel());
+
+		getContentPane().add(mainPanel, BorderLayout.CENTER);
+
+		JPanel informationPanel = new JPanel();
+		informationPanel.setLayout(new BoxLayout(informationPanel, BoxLayout.PAGE_AXIS));
+		getContentPane().add(informationPanel, BorderLayout.LINE_END);
+
+		informationTextArea = new JTextArea();
+		informationTextArea.setMargin(new Insets(8, 8, 8, 8));
+		informationPanel.add(informationTextArea);
+
+		JButton refreshButton = new JButton("Refresh");
+		refreshButton.addActionListener(actionEvent -> refresh());
+		informationPanel.add(refreshButton);
 
 		pack();
 		setLocationRelativeTo(null);
@@ -80,12 +97,25 @@ public class RedBlackTreeUI extends JFrame {
 		return controlPanel;
 	}
 
+	private void refresh() {
+		canvas.treeChanged();
+		RedBlackTree.Node selected = canvas.getSelected() == null ? rbt.root : canvas.getSelected();
+
+		String info = "Black height: " + rbt.getBlackHeight(selected) + "\n" +
+				"Minimum: " + rbt.treeMinimum(selected).key + "\n" +
+				"Maximum: " + rbt.treeMaximum(selected).key + "\n" +
+				"Tree walk:\n" + Arrays.toString(rbt.inorderTreeWalk(selected));
+
+		informationTextArea.setText(info);
+		pack();
+	}
+
 	private void insertAction() {
 		try {
 			int key = Integer.parseInt(keyField.getText());
 			rbt.insert(key);
-			canvas.treeChanged();
-			pack();
+
+			refresh();
 		} catch (NumberFormatException e) {
 			//Ignore
 		}
@@ -117,15 +147,14 @@ public class RedBlackTreeUI extends JFrame {
 			canvas.getSelected().right = node;
 		}
 
-		canvas.treeChanged();
-		pack();
+		refresh();
 	}
 
 	private void deleteAction() {
 		if (canvas.getSelected() != null) {
 			rbt.delete(canvas.getSelected());
-			canvas.treeChanged();
-			pack();
+
+			refresh();
 		}
 	}
 
