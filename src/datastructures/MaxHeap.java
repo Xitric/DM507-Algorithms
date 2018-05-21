@@ -23,6 +23,7 @@ public class MaxHeap {
 		heap[0] = heap[heapSize - 1];
 		heapSize--;
 
+		System.out.println(this);
 		maxHeapify(0);
 
 		return max;
@@ -33,11 +34,14 @@ public class MaxHeap {
 
 		int i = heapSize - 1;
 		heap[i] = number;
+		System.out.println(this);
 
 		while (i > 0 && heap[parent(i)] < heap[i]) {
 			heap[i] = heap[parent(i)];
 			heap[parent(i)] = number;
 			i = parent(i);
+
+			System.out.println(this);
 		}
 	}
 
@@ -95,7 +99,57 @@ public class MaxHeap {
 			int temp = heap[i];
 			heap[i] = heap[largest];
 			heap[largest] = temp;
+			System.out.println(this);
+
 			maxHeapify(largest);
 		}
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+
+		for (int i = 0; i < heapSize; i++) {
+			sb.append(heap[i]).append(", ");
+		}
+
+		sb.setLength(sb.length() - 2);
+		sb.append("]");
+
+		return sb.toString();
+	}
+
+	public static void main(String[] args) {
+		MaxHeap max = new MaxHeap(1000);
+		max.heap[0] = 10;
+		max.heap[1] = 7;
+		max.heap[2] = 6;
+		max.heap[3] = 5;
+		max.heap[4] = 4;
+		max.heap[5] = 2;
+		max.heap[6] = 3;
+		max.heap[7] = 1;
+		max.heap[8] = 2;
+		max.heap[9] = 3;
+		max.heap[10] = 1;
+		max.heap[11] = 1;
+		max.heapSize = 12;
+
+		System.out.println(max);
+		max.extractMax();
+//		max.insert(8);
+
+//		max.insert(5);
+//		max.insert(4);
+//		max.insert(3);
+//		max.insert(2);
+//		max.insert(1);
+//		max.insert(10);
+//		max.insert(9);
+//		max.insert(8);
+//		max.insert(7);
+//		max.insert(6);
+//		System.out.println(max);
 	}
 }
