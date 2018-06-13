@@ -1,5 +1,7 @@
 package sorting;
 
+import util.PermutationGenerator;
+
 import java.util.Arrays;
 
 /**
@@ -24,6 +26,8 @@ public class MergeSort {
 	 * @param r     the index to sort to (exclusive)
 	 */
 	public static void mergeSort(int[] input, int p, int r) {
+		System.out.println("Merge sort: " + Arrays.toString(Arrays.copyOfRange(input, p, r)));
+
 		if (p < r - 1) {
 			int q = (p + r) / 2;
 			mergeSort(input, p, q); //Sort the range [p,q-1]
@@ -45,6 +49,10 @@ public class MergeSort {
 		int[] left = Arrays.copyOfRange(input, p, q); //The numbers in the range [p,q-1]
 		int[] right = Arrays.copyOfRange(input, q, r); //The numbers in the range [q,r-1]
 
+		System.out.println("Merge:");
+		System.out.println("\t" + Arrays.toString(left));
+		System.out.println("\t" + Arrays.toString(right));
+
 		int i = 0;
 		int j = 0;
 
@@ -57,5 +65,9 @@ public class MergeSort {
 				j++;
 			}
 		}
+	}
+
+	public static void main(String[] args) {
+		mergeSort(PermutationGenerator.getRandomPermutation(16));
 	}
 }
