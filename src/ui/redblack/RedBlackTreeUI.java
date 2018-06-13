@@ -101,10 +101,16 @@ public class RedBlackTreeUI extends JFrame {
 		canvas.treeChanged();
 		RedBlackTree.Node selected = canvas.getSelected() == null ? rbt.root : canvas.getSelected();
 
-		String info = "Black height: " + rbt.getBlackHeight(selected) + "\n" +
-				"Minimum: " + rbt.treeMinimum(selected).key + "\n" +
-				"Maximum: " + rbt.treeMaximum(selected).key + "\n" +
-				"Tree walk:\n" + Arrays.toString(rbt.inorderTreeWalk(selected));
+		String info = null;
+
+		if (rbt.isValid()) {
+			info = "Black height: " + rbt.getBlackHeight(selected) + "\n" +
+					"Minimum: " + rbt.treeMinimum(selected).key + "\n" +
+					"Maximum: " + rbt.treeMaximum(selected).key + "\n" +
+					"Tree walk:\n" + Arrays.toString(rbt.inorderTreeWalk(selected));
+		} else {
+			info = "Not a valid red-black tree!";
+		}
 
 		informationTextArea.setText(info);
 		pack();

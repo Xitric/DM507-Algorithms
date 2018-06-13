@@ -7,7 +7,7 @@ public class BinarySearchTree {
 
 	public Node root;
 
-	private int size;
+	public int size;
 
 	private int counter;
 

@@ -135,6 +135,8 @@ public class BinarySearchTreeUI extends JFrame {
 			canvas.getSelected().right = node;
 		}
 
+		bst.size++;
+
 		refresh();
 	}
 

@@ -5,7 +5,6 @@ package sorting;
  */
 public class InsertionSort {
 
-	//TODO: What would we want to output here?
 	public void sort(int[] input) {
 		for (int j = 1; j < input.length; j++) {
 			int key = input[j];

@@ -334,6 +334,57 @@ public class RedBlackTree {
 		return 0;
 	}
 
+	public boolean isValid() {
+		//Compare black heights on all paths to leaves. -1 means that some pair of children had different black heights
+		if (getBranchBlackHeight(root) == -1) return false;
+
+		//Test for red children of red nodes
+		if (!testRedNodesConstraint(root)) return false;
+
+		//Test for inorder
+		int[] inorder = inorderTreeWalk(root);
+		for (int i = 1; i < inorder.length; i++) {
+			if (inorder[i - 1] > inorder[i]) return false;
+		}
+
+		//Root must be black (leaves are implicitly black)
+		return root.color == Color.Black;
+	}
+
+	//The value returned is one too high, but since it is only used for comparing branches, that is fine.
+	private int getBranchBlackHeight(Node x) {
+		if (x == NIL) return 1;
+
+		int leftBh = getBranchBlackHeight(x.left);
+		int rightBh = getBranchBlackHeight(x.right);
+
+		//Failure
+		if (leftBh == -1 || rightBh == -1) return -1;
+		if (leftBh != rightBh) return -1;
+
+		//Success
+		if (x.color == Color.Black) return leftBh + 1;
+		return leftBh;
+	}
+
+	private boolean testRedNodesConstraint(Node x) {
+		if (x.left != NIL) {
+			if (x.color == Color.Red && x.left.color == Color.Red) return false;
+
+			//Failure in left branch
+			if (!testRedNodesConstraint(x.left)) return false;
+		}
+
+		if (x.right != NIL) {
+			if (x.color == Color.Red && x.right.color == Color.Red) return false;
+
+			//Failure in right branch
+			if (!testRedNodesConstraint(x.right)) return false;
+		}
+
+		return true;
+	}
+
 	/*
 	Utility types
 	 */
