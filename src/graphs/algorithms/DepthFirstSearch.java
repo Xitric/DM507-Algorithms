@@ -12,6 +12,7 @@ public class DepthFirstSearch {
 
 	private AdjacencyList adj;
 	private int time;
+	private String startNode;
 
 	public DepthFirstSearch() {
 		adj = new AdjacencyList();
@@ -27,9 +28,21 @@ public class DepthFirstSearch {
 
 			adj.addEdge(elements[0], elements[1], 1);
 		}
+
+		System.out.print("Start node: ");
+		startNode = in.nextLine();
 	}
 
 	public void dfs() {
+		//Begin with start node
+		for (Vertex u : adj.getVertices()) {
+			if (u.identifier.equals(startNode)) {
+				dfsVisit(u);
+				break;
+			}
+		}
+
+		//Then continue alphabetically
 		for (Vertex u : adj.getVertices()) {
 			//If u.color == WHITE
 			if (u.d == 0) {
@@ -44,9 +57,20 @@ public class DepthFirstSearch {
 		u.d = ++time;
 
 		for (Vertex v : adj.getVertices(u)) {
-			if (v.d == 0) {
+			if (v.d == 0) { //v.color == WHITE
 				v.p = u;
+				System.out.println("(" + u.identifier + ", " + v.identifier + "): Tree edge");
 				dfsVisit(v);
+			} else {
+				if (v.f == 0) { //v.color == GRAY
+					System.out.println("(" + u.identifier + ", " + v.identifier + "): Back edge");
+				} else { //v.color == BLACK
+					if (u.d < v.d) {
+						System.out.println("(" + u.identifier + ", " + v.identifier + "): Forward edge");
+					} else {
+						System.out.println("(" + u.identifier + ", " + v.identifier + "): Cross edge");
+					}
+				}
 			}
 		}
 
