@@ -1,5 +1,9 @@
 package sorting;
 
+import util.PermutationGenerator;
+
+import java.util.Arrays;
+
 /**
  * @author Kasper
  */
@@ -42,6 +46,9 @@ public class QuickSort {
 		int x = input[r];
 		int i = p - 1;
 
+		System.out.println("\nPartition:");
+		System.out.println("Input: " + Arrays.toString(Arrays.copyOfRange(input, p, r + 1)));
+
 		for (int j = p; j < r; j++) {
 			if (input[j] <= x) {
 				i++;
@@ -51,6 +58,10 @@ public class QuickSort {
 
 		exchange(input, i + 1, r);
 
+		System.out.println("Pivot: " + x);
+		System.out.println("Pivot placement: " + (i + 1));
+		System.out.println("Result: " + Arrays.toString(Arrays.copyOfRange(input, p, r + 1)));
+
 		return i + 1;
 	}
 
@@ -58,5 +69,9 @@ public class QuickSort {
 		int temp = input[a];
 		input[a] = input[b];
 		input[b] = temp;
+	}
+
+	public static void main(String[] args) {
+		sort(PermutationGenerator.getRandomPermutation(8), 0, 7);
 	}
 }

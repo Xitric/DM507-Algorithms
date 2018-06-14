@@ -23,6 +23,7 @@ public class MinHeap {
 		heap[0] = heap[heapSize - 1];
 		heapSize--;
 
+		System.out.println(this);
 		minHeapify(0);
 
 		return min;
@@ -33,11 +34,14 @@ public class MinHeap {
 
 		int i = heapSize - 1;
 		heap[i] = number;
+		System.out.println(this);
 
 		while (i > 0 && heap[parent(i)] > heap[i]) {
 			heap[i] = heap[parent(i)];
 			heap[parent(i)] = number;
 			i = parent(i);
+
+			System.out.println(this);
 		}
 	}
 
@@ -95,7 +99,24 @@ public class MinHeap {
 			int temp = heap[i];
 			heap[i] = heap[smallest];
 			heap[smallest] = temp;
+			System.out.println(this);
+
 			minHeapify(smallest);
 		}
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+
+		for (int i = 0; i < heapSize; i++) {
+			sb.append(heap[i]).append(", ");
+		}
+
+		sb.setLength(sb.length() - 2);
+		sb.append("]");
+
+		return sb.toString();
 	}
 }

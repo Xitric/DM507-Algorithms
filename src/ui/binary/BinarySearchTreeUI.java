@@ -1,6 +1,6 @@
-package ui.redblack;
+package ui.binary;
 
-import datastructures.RedBlackTree;
+import datastructures.BinarySearchTree;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,19 +9,17 @@ import java.util.Arrays;
 /**
  * @author Kasper
  */
-public class RedBlackTreeUI extends JFrame {
+public class BinarySearchTreeUI extends JFrame {
 
-	private RedBlackTree rbt;
-	private RedBlackTreeCanvas canvas;
+	private BinarySearchTree bst;
+	private BinarySearchTreeCanvas canvas;
 	private JTextField keyField;
-	private JRadioButton redRadio;
-	private JRadioButton blackRadio;
 	private JTextArea informationTextArea;
 
-	public RedBlackTreeUI() {
-		super("RedBlack Tree UI");
+	public BinarySearchTreeUI() {
+		super("Binary Search Tree UI");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		rbt = new RedBlackTree();
+		bst = new BinarySearchTree();
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
@@ -48,7 +46,7 @@ public class RedBlackTreeUI extends JFrame {
 	}
 
 	private JPanel setupCanvas() {
-		canvas = new RedBlackTreeCanvas(rbt);
+		canvas = new BinarySearchTreeCanvas(bst);
 		return canvas;
 	}
 
@@ -76,17 +74,10 @@ public class RedBlackTreeUI extends JFrame {
 		//Force insertion
 		JPanel forcePanel = new JPanel();
 		forcePanel.setLayout(new FlowLayout());
-		redRadio = new JRadioButton("Red", true);
-		blackRadio = new JRadioButton("Black");
-		ButtonGroup colorGroup = new ButtonGroup();
-		colorGroup.add(redRadio);
-		colorGroup.add(blackRadio);
 		JButton leftButton = new JButton("Insert left");
 		leftButton.addActionListener(actionEvent -> forceInsert(true));
 		JButton rightButton = new JButton("Insert right");
 		rightButton.addActionListener(actionEvent -> forceInsert(false));
-		forcePanel.add(redRadio);
-		forcePanel.add(blackRadio);
 		forcePanel.add(leftButton);
 		forcePanel.add(rightButton);
 
@@ -99,18 +90,11 @@ public class RedBlackTreeUI extends JFrame {
 
 	private void refresh() {
 		canvas.treeChanged();
-		RedBlackTree.Node selected = canvas.getSelected() == null ? rbt.root : canvas.getSelected();
+		BinarySearchTree.Node selected = canvas.getSelected() == null ? bst.root : canvas.getSelected();
 
-		String info = null;
-
-		if (rbt.isValid()) {
-			info = "Black height: " + rbt.getBlackHeight(selected) + "\n" +
-					"Minimum: " + rbt.treeMinimum(selected).key + "\n" +
-					"Maximum: " + rbt.treeMaximum(selected).key + "\n" +
-					"Tree walk:\n" + Arrays.toString(rbt.inorderTreeWalk(selected));
-		} else {
-			info = "Not a valid red-black tree!";
-		}
+		String info = "Minimum: " + bst.treeMinimum(selected).key + "\n" +
+				"Maximum: " + bst.treeMaximum(selected).key + "\n" +
+				"Tree walk:\n" + Arrays.toString(bst.orderedTraversal());
 
 		informationTextArea.setText(info);
 		pack();
@@ -119,9 +103,11 @@ public class RedBlackTreeUI extends JFrame {
 	private void insertAction() {
 		try {
 			int key = Integer.parseInt(keyField.getText());
-			rbt.insert(key);
+			bst.insert(key);
 
 			refresh();
+			keyField.setText("");
+			keyField.requestFocus();
 		} catch (NumberFormatException e) {
 			//Ignore
 		}
@@ -137,34 +123,32 @@ public class RedBlackTreeUI extends JFrame {
 			return;
 		}
 
-		RedBlackTree.Node node = new RedBlackTree.Node(key);
-		if (redRadio.isSelected()) {
-			node.color = RedBlackTree.Color.Red;
-		} else {
-			node.color = RedBlackTree.Color.Black;
-		}
-
+		BinarySearchTree.Node node = new BinarySearchTree.Node();
+		node.key = key;
 		node.parent = canvas.getSelected();
-		node.left = RedBlackTree.NIL;
-		node.right = RedBlackTree.NIL;
+		node.left = null;
+		node.right = null;
+
 		if (left) {
 			canvas.getSelected().left = node;
 		} else {
 			canvas.getSelected().right = node;
 		}
 
+		bst.size++;
+
 		refresh();
 	}
 
 	private void deleteAction() {
 		if (canvas.getSelected() != null) {
-			rbt.delete(canvas.getSelected());
+			bst.delete(canvas.getSelected());
 
 			refresh();
 		}
 	}
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(RedBlackTreeUI::new);
+		SwingUtilities.invokeLater(BinarySearchTreeUI::new);
 	}
 }
