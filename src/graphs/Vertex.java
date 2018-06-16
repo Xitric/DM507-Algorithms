@@ -8,6 +8,7 @@ public class Vertex implements Comparable<Vertex> {
 	public String identifier;
 	public int d;
 	public int f;
+	public int key;
 	public Vertex p;
 
 	public Vertex(String identifier) {

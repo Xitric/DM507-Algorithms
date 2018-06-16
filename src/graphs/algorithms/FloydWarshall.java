@@ -1,7 +1,6 @@
 package graphs.algorithms;
 
-import graphs.GraphBuilder;
-
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -9,17 +8,29 @@ import java.util.Scanner;
  */
 public class FloydWarshall {
 
-	public void floydWarshall(int[][] w) {
-		int n = w.length;
+	public void floydWarshall(int[][] d0, int[][] p0) {
+		int n = d0.length;
 		int[][][] d = new int[n + 1][][];
-		d[0] = w;
+		d[0] = d0;
+
+		int[][][] p = new int[n + 1][][];
+		p[0] = p0;
 
 		for (int k = 1; k <= n; k++) {
 			d[k] = new int[n][n];
+			p[k] = new int[n][n];
 
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
+					//Update distances
 					d[k][i][j] = Math.min(d[k - 1][i][j], sum(d[k - 1][i][k - 1], d[k - 1][k - 1][j]));
+
+					//Update predecessors
+					if (d[k - 1][i][j] <= sum(d[k - 1][i][k - 1], d[k - 1][k - 1][j])) {
+						p[k][i][j] = p[k - 1][i][j];
+					} else {
+						p[k][i][j] = p[k - 1][k - 1][j];
+					}
 				}
 			}
 		}
@@ -27,7 +38,10 @@ public class FloydWarshall {
 		//Print resulting matrices
 		for (int num = 0; num <= n; num++) {
 			System.out.println("D^" + num);
-			print(d[num]);
+			System.out.println("Distances");
+			printD(d[num]);
+			System.out.println("Predecessors");
+			printP(p[num]);
 			System.out.println();
 		}
 	}
@@ -40,11 +54,26 @@ public class FloydWarshall {
 		return a + b;
 	}
 
-	private void print(int[][] matrix) {
+	private void printD(int[][] matrix) {
 		for (int[] row : matrix) {
 			for (int col : row) {
 				if (col == Integer.MAX_VALUE) {
 					System.out.print("∞");
+				} else {
+					System.out.print(col);
+				}
+
+				System.out.print(", ");
+			}
+			System.out.println();
+		}
+	}
+
+	private void printP(int[][] matrix) {
+		for (int[] row : matrix) {
+			for (int col : row) {
+				if (col == -1) {
+					System.out.print("NIL");
 				} else {
 					System.out.print(col);
 				}
@@ -74,32 +103,43 @@ public class FloydWarshall {
 		}
 
 		FloydWarshall fw = new FloydWarshall();
-		fw.floydWarshall(builder.getMatrix());
+		fw.floydWarshall(builder.getDMatrix(), builder.getPMatrix());
 	}
 
-	private static class FloydWarshallBuilder implements GraphBuilder {
+	private static class FloydWarshallBuilder {
 
-		private int[][] matrix;
+		private int[][] dMatrix;
+		private int[][] pMatrix;
 
-		public int[][] getMatrix() {
-			return matrix;
+		public int[][] getDMatrix() {
+			return dMatrix;
 		}
 
-		@Override
-		public void setNodeCount(int nodes) {
-			matrix = new int[nodes][nodes];
+		public int[][] getPMatrix() {
+			return pMatrix;
+		}
 
+		public void setNodeCount(int nodes) {
+			pMatrix = new int[nodes][nodes];
+			dMatrix = new int[nodes][nodes];
+
+			//Distance matrix
 			//The diagonal should be zeros, the rest is MAX_VALUE to indicate infinity
 			for (int i = 0; i < nodes; i++) {
 				for (int j = 0; j < nodes; j++) {
 					if (i != j) {
-						matrix[i][j] = Integer.MAX_VALUE;
+						dMatrix[i][j] = Integer.MAX_VALUE;
 					}
 				}
 			}
+
+			//Predecessor matrix
+			//Initially all cells are NIL, here identified using the value -1
+			for (int i = 0; i < nodes; i++) {
+				Arrays.fill(pMatrix[i], -1);
+			}
 		}
 
-		@Override
 		public void addEdge(String u, String v, int w) {
 			int i = 0;
 			int j = 0;
@@ -111,7 +151,8 @@ public class FloydWarshall {
 				throw new IllegalArgumentException("For the Floyd-Warshall algorithm node names must be integers");
 			}
 
-			matrix[i][j] = w;
+			dMatrix[i][j] = w;
+			pMatrix[i][j] = i + 1;
 		}
 	}
 }
