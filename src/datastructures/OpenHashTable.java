@@ -20,6 +20,88 @@ public class OpenHashTable {
 		this.h = h;
 	}
 
+	/**
+	 * Build an open-addressed hash table from a set of integers.
+	 */
+	public static void buildTable() {
+		int m = 11;
+		int c1 = 1;
+		int c2 = 3;
+
+		//Linear probing with the auxiliary hash function:
+		//                     h(k) = k
+		HashFunction auxiliary = k -> k;
+		ProbeHashFunction hLinear = HashFunctionFactory.getLinearProbe(auxiliary, m);
+
+		//Quadratic probing with the auxiliary hash function:
+		//  h(k) = k
+		ProbeHashFunction hQuadratic = HashFunctionFactory.getQuadraticProbe(auxiliary, c1, c2, m);
+
+		//Double hashing with the auxiliary hash functions:
+		//           h1(k)   = k
+		HashFunction h1 = k -> k;
+		//           h2(k)   = 1 + (k mod (m - 1))
+		HashFunction h2 = k -> 1 + (k % (m - 1));
+		ProbeHashFunction hDouble = HashFunctionFactory.getDoubleHash(h1, h2, m);
+
+		//Run hash insertions (here using quadratic hashing)
+		OpenHashTable oht = new OpenHashTable(m, hQuadratic);
+		oht.insertAll(73, 15, 45, 50);
+		System.out.println();
+		System.out.println(oht);
+	}
+
+	/**
+	 * Insert a new key into an open-addressed hash table with initial elements.
+	 * This one uses LINEAR probing
+	 */
+	public static void insertIntoExisting() {
+		//Længden på hashtabellen
+		int m = 7;
+
+		//h'(x) = (x + 2) mod m
+		//Nedenstående k svarer til ovenstående x
+		HashFunction h = k -> (k + 2) % m; // Man skal kun ændre til højre for pilen.
+		ProbeHashFunction linearProbe = HashFunctionFactory.getLinearProbe(h, m);
+
+		//Build hash table from task description
+		OpenHashTable oht = new OpenHashTable(m, linearProbe);
+		oht.insert(0, 89);
+		oht.insert(4, 23);
+		oht.insert(5, 45);
+		oht.insert(6, 11);
+
+		oht.insert(73);
+		System.out.println(oht);
+	}
+
+	/**
+	 * Insert a new key into an open-addressed hash table with initial elements.
+	 * This one uses DOUBLE hash
+	 */
+	public static void insertIntoExisting2() {
+		//Længden på hashtabellen
+		int m = 11;
+
+		//           h1(k)   = k mod m
+		HashFunction h1 = k -> k % m;
+
+		//           h2(k)   = 1 + (k mod (m - 1))
+		HashFunction h2 = k -> 1 + (k % (m - 1));
+
+		//ProbeHashFunction hQuadratic = HashFunctionFactory.getQuadraticProbe(h1, c1, c2);
+		ProbeHashFunction hDouble = HashFunctionFactory.getDoubleHash(h1, h2, m);
+
+		//Build hash table from task description
+		OpenHashTable oht = new OpenHashTable(m, hDouble);
+		oht.insert(3, 14);
+		oht.insert(7, 3);
+		oht.insert(9, 41);
+
+		oht.insert(18);
+		System.out.println(oht);
+	}
+
 	public void insert(int k) {
 		for (int i = 0; i < table.length; i++) {
 			int position = h.hash(k, i);
@@ -79,83 +161,8 @@ public class OpenHashTable {
 	}
 
 	public static void main(String[] args) {
-//		buildTable();
-//		insertIntoExisting();
+		//		buildTable();
+		//		insertIntoExisting();
 		insertIntoExisting2();
-	}
-
-	/**
-	 * Build an open-addressed hash table from a set of integers.
-	 */
-	public static void buildTable() {
-		int m = 11;
-		int c1 = 1;
-		int c2 = 3;
-
-		//Linear probing with the auxiliary hash function:
-		//                     h(k) = k
-		HashFunction auxiliary = k -> k;
-		ProbeHashFunction hLinear = HashFunctionFactory.getLinearProbe(auxiliary, m);
-
-		//Quadratic probing with the auxiliary hash function:
-		//  h(k) = k
-		ProbeHashFunction hQuadratic = HashFunctionFactory.getQuadraticProbe(auxiliary, c1, c2, m);
-
-		//Double hashing with the auxiliary hash functions:
-		//  h1(k) = k
-		//  h2(k) = 1 + (k mod (m - 1))
-		HashFunction h1 = k -> k;
-		HashFunction h2 = k -> 1 + (k % (m - 1));
-		ProbeHashFunction hDouble = HashFunctionFactory.getDoubleHash(h1, h2, m);
-
-		//Run hash insertions (quadratic hashing)
-		OpenHashTable oht = new OpenHashTable(m, hQuadratic);
-		oht.insertAll(73, 15, 45, 50);
-		System.out.println();
-		System.out.println(oht);
-	}
-
-	/**
-	 * Insert a new key into an open-addressed hash table with initial elements.
-	 * This one uses LINEAR probing
-	 */
-	public static void insertIntoExisting() {
-		int m = 7; //Længden på hashtabellen
-		//h'(x) = (x + 2)
-		//Nedenstående k svarer til ovenstående x
-		HashFunction h = k -> (k+2) % m; // Man skal kun ændre til højre for pilen.
-		ProbeHashFunction linearProbe = HashFunctionFactory.getLinearProbe(h, m);
-
-		//Build hash table from task description
-		OpenHashTable oht = new OpenHashTable(m, linearProbe);
-		oht.insert(0, 89);
-		oht.insert(4, 23);
-		oht.insert(5, 45);
-		oht.insert(6, 11);
-
-		oht.insert(73);
-		System.out.println(oht);
-
-	}
-
-	/**
-	 * Insert a new key into an open-addressed hash table with initial elements.
-	 * This one uses DOUBLE hash
-	 */
-	public static void insertIntoExisting2() {
-		int m = 11; //Antal elementer givet i opgaven
-		HashFunction h1 = k -> k % m;
-		HashFunction h2 = k -> 1 + (k % (m - 1));
-		//ProbeHashFunction hDouble = HashFunctionFactory.getQuadraticProbe(h1, c1, c2);
-		ProbeHashFunction hDouble = HashFunctionFactory.getDoubleHash(h1, h2, m);
-
-		//Build hash table from task description
-		OpenHashTable oht = new OpenHashTable(m, hDouble);
-		oht.insert(3, 14);
-		oht.insert(7, 3);
-		oht.insert(9, 41);
-
-		oht.insert(18);
-		System.out.println(oht);
 	}
 }
