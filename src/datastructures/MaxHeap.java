@@ -17,6 +17,19 @@ public class MaxHeap {
 		heap = new int[maxElements];
 	}
 
+	public void buildMaxHeap(int[] data) {
+		System.arraycopy(data, 0, heap, 0, data.length);
+		heapSize = data.length;
+
+		for (int i = data.length / 2 - 1; i >= 0; i--) {
+			maxHeapify(i);
+		}
+	}
+
+	public int maximum() {
+		return heap[0];
+	}
+
 	public int extractMax() {
 		int max = heap[0];
 
@@ -29,20 +42,22 @@ public class MaxHeap {
 		return max;
 	}
 
-	public void insert(int number) {
-		heapSize++;
-
-		int i = heapSize - 1;
-		heap[i] = number;
+	public void increaseKey(int i, int key) {
+		heap[i] = key;
 		System.out.println(this);
 
 		while (i > 0 && heap[parent(i)] < heap[i]) {
-			heap[i] = heap[parent(i)];
-			heap[parent(i)] = number;
+			exchange(i, parent(i));
 			i = parent(i);
 
 			System.out.println(this);
 		}
+	}
+
+	public void insert(int number) {
+		heapSize++;
+		heap[heapSize - 1] = Integer.MIN_VALUE;
+		increaseKey(heapSize - 1, number);
 	}
 
 	/**
@@ -96,13 +111,17 @@ public class MaxHeap {
 		}
 
 		if (largest != i) {
-			int temp = heap[i];
-			heap[i] = heap[largest];
-			heap[largest] = temp;
+			exchange(i, largest);
 			System.out.println(this);
 
 			maxHeapify(largest);
 		}
+	}
+
+	public void exchange(int i, int j) {
+		int temp = heap[i];
+		heap[i] = heap[j];
+		heap[j] = temp;
 	}
 
 	@Override

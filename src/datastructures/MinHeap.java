@@ -17,6 +17,19 @@ public class MinHeap {
 		heap = new int[maxElements];
 	}
 
+	public void buildMinHeap(int[] data) {
+		System.arraycopy(data, 0, heap, 0, data.length);
+		heapSize = data.length;
+
+		for (int i = data.length / 2 - 1; i >= 0; i--) {
+			minHeapify(i);
+		}
+	}
+
+	public int minimum() {
+		return heap[0];
+	}
+
 	public int extractMin() {
 		int min = heap[0];
 
@@ -29,20 +42,22 @@ public class MinHeap {
 		return min;
 	}
 
-	public void insert(int number) {
-		heapSize++;
-
-		int i = heapSize - 1;
-		heap[i] = number;
+	public void decreaseKey(int i, int key) {
+		heap[i] = key;
 		System.out.println(this);
 
 		while (i > 0 && heap[parent(i)] > heap[i]) {
-			heap[i] = heap[parent(i)];
-			heap[parent(i)] = number;
+			exchange(i, parent(i));
 			i = parent(i);
 
 			System.out.println(this);
 		}
+	}
+
+	public void insert(int number) {
+		heapSize++;
+		heap[heapSize - 1] = Integer.MAX_VALUE;
+		decreaseKey(heapSize - 1, number);
 	}
 
 	/**
@@ -96,13 +111,17 @@ public class MinHeap {
 		}
 
 		if (smallest != i) {
-			int temp = heap[i];
-			heap[i] = heap[smallest];
-			heap[smallest] = temp;
+			exchange(i, smallest);
 			System.out.println(this);
 
 			minHeapify(smallest);
 		}
+	}
+
+	public void exchange(int i, int j) {
+		int temp = heap[i];
+		heap[i] = heap[j];
+		heap[j] = temp;
 	}
 
 	@Override
