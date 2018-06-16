@@ -5,6 +5,11 @@ package cycles;
  */
 public class CycleCounter {
 
+	public static void main(String[] args) {
+        //System.out.println(count(new int[]{1,3,4,3,2,5}));
+
+	}
+
 	/**
 	 * Count the number of cycles in the specified array of integers.
 	 *

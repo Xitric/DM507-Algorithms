@@ -81,7 +81,7 @@ public class OpenHashTable {
 	public static void main(String[] args) {
 //		buildTable();
 //		insertIntoExisting();
-//		insertIntoExisting2();
+		insertIntoExisting2();
 	}
 
 	/**
@@ -110,37 +110,43 @@ public class OpenHashTable {
 
 		//Run hash insertions (quadratic hashing)
 		OpenHashTable oht = new OpenHashTable(m, hQuadratic);
-		oht.insertAll(10, 22, 31, 4, 15, 28, 17, 88, 59);
+		oht.insertAll(73, 15, 45, 50);
 		System.out.println();
 		System.out.println(oht);
 	}
 
 	/**
 	 * Insert a new key into an open-addressed hash table with initial elements.
+	 * This one uses LINEAR probing
 	 */
 	public static void insertIntoExisting() {
-		int m = 10;
-		HashFunction h = k -> k % m;
+		int m = 7; //Længden på hashtabellen
+		//h'(x) = (x + 2)
+		//Nedenstående k svarer til ovenstående x
+		HashFunction h = k -> (k+2) % m; // Man skal kun ændre til højre for pilen.
 		ProbeHashFunction linearProbe = HashFunctionFactory.getLinearProbe(h, m);
 
 		//Build hash table from task description
 		OpenHashTable oht = new OpenHashTable(m, linearProbe);
-		oht.insert(1, 11);
-		oht.insert(2, 31);
-		oht.insert(4, 24);
-		oht.insert(5, 15);
-		oht.insert(8, 48);
+		oht.insert(0, 89);
+		oht.insert(4, 23);
+		oht.insert(5, 45);
+		oht.insert(6, 11);
 
-		oht.insert(4);
+		oht.insert(73);
+		System.out.println(oht);
+
 	}
 
 	/**
 	 * Insert a new key into an open-addressed hash table with initial elements.
+	 * This one uses DOUBLE hash
 	 */
 	public static void insertIntoExisting2() {
-		int m = 11;
+		int m = 11; //Antal elementer givet i opgaven
 		HashFunction h1 = k -> k % m;
 		HashFunction h2 = k -> 1 + (k % (m - 1));
+		//ProbeHashFunction hDouble = HashFunctionFactory.getQuadraticProbe(h1, c1, c2);
 		ProbeHashFunction hDouble = HashFunctionFactory.getDoubleHash(h1, h2, m);
 
 		//Build hash table from task description
@@ -150,5 +156,6 @@ public class OpenHashTable {
 		oht.insert(9, 41);
 
 		oht.insert(18);
+		System.out.println(oht);
 	}
 }
