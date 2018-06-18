@@ -11,7 +11,7 @@ public class Template {
 
 		//Algorithm begins here
 		//Use Counter.count() to count an iteration of an internal loop
-		//Use Counter.count() after each iteration, if the next iteration will reset the value
+		//Use Counter.reset() after each iteration, if the next iteration will reset the value
 		//Eg.:
 		//int j = 1;
 		//while (j <= i) {
