@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class Kruskal {
 
-	private static final boolean DIRECTED = false;
+	private static final boolean DIRECTED = true;
 	protected AdjacencyList adj;
 
 	public Kruskal() {

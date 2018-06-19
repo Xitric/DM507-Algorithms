@@ -74,4 +74,16 @@ public class AdjacencyList {
 	public int getWeight(Vertex u, Vertex v) {
 		return adj.get(u).get(v);
 	}
+
+	public AdjacencyList transpose() {
+		AdjacencyList adjT = new AdjacencyList();
+
+		for (Vertex v : getVertices()) {
+			for (Vertex u : getVertices(v)) {
+				adjT.addEdge(u.identifier, v.identifier, getWeight(v, u));
+			}
+		}
+
+		return adjT;
+	}
 }

@@ -11,6 +11,7 @@ import java.util.Scanner;
  */
 public class BellmanFord extends SingleSourceAlgorithm {
 
+	private static final boolean DIRECTED = true;
 	private Vertex s;
 
 	public BellmanFord() {
@@ -26,6 +27,7 @@ public class BellmanFord extends SingleSourceAlgorithm {
 			String[] elements = input.split(" ");
 
 			adj.addEdge(elements[0], elements[1], Integer.parseInt(elements[2]));
+			if (!DIRECTED) adj.addEdge(elements[1], elements[0], Integer.parseInt(elements[2]));
 		}
 
 		System.out.print("Source vertex: ");

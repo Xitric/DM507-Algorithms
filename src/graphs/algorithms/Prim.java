@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 public class Prim {
 
-	private static final boolean DIRECTED = false;
+	private static final boolean DIRECTED = true;
 	protected AdjacencyList adj;
 	private Vertex r;
 

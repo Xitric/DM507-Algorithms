@@ -8,6 +8,8 @@ import java.util.Scanner;
  */
 public class FloydWarshall {
 
+	private static final boolean DIRECTED = true;
+
 	public void floydWarshall(int[][] d0, int[][] p0) {
 		int n = d0.length;
 		int[][][] d = new int[n + 1][][];
@@ -100,6 +102,7 @@ public class FloydWarshall {
 			String[] elements = input.split(" ");
 
 			builder.addEdge(elements[0], elements[1], Integer.parseInt(elements[2]));
+			if (! DIRECTED) builder.addEdge(elements[1], elements[0], Integer.parseInt(elements[2]));
 		}
 
 		FloydWarshall fw = new FloydWarshall();

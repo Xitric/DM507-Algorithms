@@ -3,6 +3,8 @@ package graphs.algorithms;
 import graphs.AdjacencyList;
 import graphs.Vertex;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -10,6 +12,7 @@ import java.util.Scanner;
  */
 public class DepthFirstSearch {
 
+	private static final boolean DIRECTED = true;
 	private AdjacencyList adj;
 	private int time;
 	private String startNode;
@@ -27,6 +30,7 @@ public class DepthFirstSearch {
 			String[] elements = input.split(" ");
 
 			adj.addEdge(elements[0], elements[1], 1);
+			if (!DIRECTED) adj.addEdge(elements[1], elements[0], 1);
 		}
 
 		System.out.print("Start node: ");
@@ -77,6 +81,17 @@ public class DepthFirstSearch {
 		u.f = ++time;
 	}
 
+	public void topologicSort() {
+		dfs();
+		List<Vertex> vertices = adj.getVertices();
+		vertices.sort(Comparator.comparingInt(v -> -v.f));
+
+		System.out.println("\nTopologic sort:");
+		for (Vertex v : vertices) {
+			System.out.print(v.identifier + ", ");
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -93,6 +108,7 @@ public class DepthFirstSearch {
 
 	public static void main(String[] args) {
 		DepthFirstSearch dfs = new DepthFirstSearch();
-		dfs.dfs();
+//		dfs.dfs();
+		dfs.topologicSort();
 	}
 }
