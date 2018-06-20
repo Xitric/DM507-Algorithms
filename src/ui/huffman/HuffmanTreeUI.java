@@ -93,8 +93,8 @@ public class HuffmanTreeUI extends JFrame {
 			String[] elementArray = keyField.getText().split(",");
 			for (String elm : elementArray) {
 				String[] elmA = elm.split(":");
-				frequencies.add(Integer.parseInt(elmA[1]));
-				elements.add(elmA[0]);
+				frequencies.add(Integer.parseInt(elmA[1].trim()));
+				elements.add(elmA[0].trim());
 			}
 
 			ht = HuffmanTree.createHuffmanTree(frequencies.toArray(new Integer[0]), elements.toArray(new String[0]));

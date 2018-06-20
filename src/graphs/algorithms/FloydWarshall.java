@@ -25,12 +25,18 @@ public class FloydWarshall {
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
 					//Update distances
+					//If going through k is shorter than the current path, update it
 					d[k][i][j] = Math.min(d[k - 1][i][j], sum(d[k - 1][i][k - 1], d[k - 1][k - 1][j]));
 
 					//Update predecessors
+					//If going through k was not a better path, the parent is unchanged
 					if (d[k - 1][i][j] <= sum(d[k - 1][i][k - 1], d[k - 1][k - 1][j])) {
 						p[k][i][j] = p[k - 1][i][j];
-					} else {
+					}
+					//If going through k was in fact a better path, we update the parent
+					else {
+						//We set it equal to the predecessor of j when going from k to j (the predecessor is not
+						//necessarily k though)
 						p[k][i][j] = p[k - 1][k - 1][j];
 					}
 				}
@@ -93,7 +99,7 @@ public class FloydWarshall {
 		System.out.print("Vertex count: ");
 		builder.setNodeCount(Integer.parseInt(in.nextLine()));
 
-		System.out.println("Enter edges in the format:");
+		System.out.println("Enter edges in the format (vertices start at 1, not 0):");
 		System.out.println("\t\"u v weight\"");
 		System.out.println("Terminate with an empty line");
 
