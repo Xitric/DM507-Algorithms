@@ -46,8 +46,16 @@ public class Prim {
 		Queue<Vertex> q = new PriorityQueue<>(new KeyVertexComparator());
 		q.addAll(adj.getVertices());
 
+		int weight = 0;
+
 		while (! q.isEmpty()) {
 			Vertex u = q.poll();
+			System.out.println("Pulled " + u.identifier + " from queue");
+
+			if (u.p != null) {
+				System.out.println("\t(" + u.p.identifier + ", " + u.identifier + ")");
+				weight += adj.getWeight(u.p, u);
+			}
 
 			for (Vertex v : adj.getVertices(u)) {
 				if (q.contains(v) && adj.getWeight(u, v) < v.key) {
@@ -59,14 +67,14 @@ public class Prim {
 		}
 
 		//Print result
-		int weight = 0;
-
-		System.out.println("The MST consists of the following edges:");
-		for (Vertex v : adj.getVertices()) {
-			if (v == r) continue;
-			System.out.println("(" + v.identifier + ", " + v.p.identifier + ")");
-			weight += adj.getWeight(v, v.p);
-		}
+//		int weight = 0;
+//
+//		System.out.println("The MST consists of the following edges:");
+//		for (Vertex v : adj.getVertices()) {
+//			if (v == r) continue;
+//			System.out.println("(" + v.identifier + ", " + v.p.identifier + ")");
+//			weight += adj.getWeight(v, v.p);
+//		}
 
 		System.out.println("Total price: " + weight);
 	}

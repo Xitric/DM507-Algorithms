@@ -1,7 +1,5 @@
 package sorting;
 
-import util.PermutationGenerator;
-
 import java.util.Arrays;
 
 /**
@@ -72,6 +70,8 @@ public class QuickSort {
 	}
 
 	public static void main(String[] args) {
-		sort(PermutationGenerator.getRandomPermutation(8), 0, 7);
+		int[] input = {4, 7, 1, 5, 8, 2, 5, 5};
+		partition(input, 0, 7);
+		System.out.println(Arrays.toString(input));
 	}
 }

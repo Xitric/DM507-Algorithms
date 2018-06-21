@@ -13,6 +13,10 @@ public class HashFunctionFactory {
 		return (k, i) -> (h.hash(k) + c1 * i + c2 * i * i) % m;
 	}
 
+//	public static ProbeHashFunction getQuadraticProbe(HashFunction h, float c1, float c2, int m) {
+//		return (k, i) -> (int) ((h.hash(k) + c1 * i + c2 * i * i) % m);
+//	}
+
 	public static ProbeHashFunction getDoubleHash(HashFunction h1, HashFunction h2, int m) {
 		return (k, i) -> (h1.hash(k) + i * h2.hash(k)) % m;
 	}

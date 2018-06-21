@@ -17,7 +17,7 @@ public class CountingSort {
 	 * Sort the specified array of integers.
 	 *
 	 * @param input the array of integers to sort
-	 * @param k     the maximum value in the input array
+	 * @param k     the maximum value in the input array (inclusive)
 	 */
 	public void sort(int[] input, int k) {
 		this.input = input;

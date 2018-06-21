@@ -81,6 +81,7 @@ public class DisjointSetTree {
 		//Print parent-child relationships
 		for (Node node : nodes) {
 			System.out.println(node.content + " parent: " + node.p.content);
+			System.out.println(node.content + " rank " + node.rank + ", parent: " + node.p.content);
 		}
 	}
 }
